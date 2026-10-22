@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="images/project-management.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fox</title>
+    <script>
+      (function () {
+        const is404 = location.pathname.includes('404.html');
+        const alreadyRedirected = sessionStorage.getItem('redirected');
+
+        if (!is404 && !alreadyRedirected) {
+          const current = location.pathname + location.search + location.hash;
+          const redirect =
+            '/project-management' + current.replace('/project-management', '');
+          sessionStorage.setItem('redirected', 'true');
+          window.location.replace(redirect);
+        } else {
+          sessionStorage.removeItem('redirected'); // Clean up
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
