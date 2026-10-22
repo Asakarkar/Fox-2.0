@@ -9,6 +9,7 @@ const seedRoles = async () => {
 
   try {
     await connectDatabase();
+    await RoleModel.createCollection();
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -43,4 +44,3 @@ const seedRoles = async () => {
 };
 
 seedRoles().catch((error) => console.error('Error running seed script', error));
-

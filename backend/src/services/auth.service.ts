@@ -12,6 +12,16 @@ import {
 } from '../utils/appError.js';
 import { ProviderEnum } from '../enums/account-provider.enum.js';
 
+const ensureAuthCollectionsExist = async () => {
+  await Promise.all([
+    UserModel.createCollection(),
+    AccountModel.createCollection(),
+    WorkspaceModel.createCollection(),
+    RoleModel.createCollection(),
+    MemberModel.createCollection(),
+  ]);
+};
+
 export const loginOrCreateAccountService = async (data: {
   provider: string; // Authentication provider (e.g., Google, Facebook)
   displayName: string; // User's display name
@@ -20,6 +30,7 @@ export const loginOrCreateAccountService = async (data: {
   email?: string; // Optional email address
 }) => {
   const { provider, displayName, providerId, picture, email } = data; // Destructure input data
+  await ensureAuthCollectionsExist();
   const session = await mongoose.startSession(); // Start a new MongoDB session
   try {
     session.startTransaction(); // Begin a transaction
@@ -86,6 +97,7 @@ export const registerUserService = async (body: {
 }) => {
   const { name, password } = body; // Destructure the input body
   const email = body.email.trim().toLowerCase();
+  await ensureAuthCollectionsExist();
   const session = await mongoose.startSession(); // Start a new MongoDB session
   try {
     session.startTransaction(); // Begin a transaction

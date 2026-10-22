@@ -2,7 +2,7 @@
 import 'dotenv/config';
 
 // Import express and related types for building the server
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 // Import CORS middleware for handling cross-origin requests
 import cors from 'cors';
 // Import session middleware for managing user sessions
@@ -15,16 +15,11 @@ import connectDatabase from './config/database.config.js';
 import { errorHandler } from './middlewares/errorHandler.middleware.js';
 // Import HTTP status codes
 import { HTTPSTATUS } from './config/http.config.js';
-// Import async handler middleware for handling async errors
-import { asyncHandler } from './middlewares/asyncHandler.middleware.js';
 // Import Passport.js configuration for authentication
 import './config/passport.config.js';
 // Import Passport.js for authentication
 import passport from 'passport';
 // Import custom error class for handling application-specific errors
-import { BadRequestException } from './utils/appError.js';
-// Import error code enumeration
-import { ErrorCodeEnum } from './enums/error-code.enum.js';
 // Import authentication routes
 import authRoutes from './routes/auth.route.js';
 // Import user-related routes
@@ -76,19 +71,9 @@ app.use(
 );
 
 // Define a test route for the root path
-app.get(
-  '/',
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    res.send('working...');
-    // Throw a custom bad request error
-    throw new BadRequestException(
-      'This is a bad request',
-      ErrorCodeEnum.AUTH_INVALID_TOKEN
-    );
-    // Send a success response (this line is unreachable due to the error above)
-    return res.status(HTTPSTATUS.OK).json({ message: 'Backend Running' });
-  })
-);
+app.get('/', (_req, res) => {
+  res.status(HTTPSTATUS.OK).json({ message: 'Backend Running' });
+});
 
 //passport session
 // Mount authentication routes at /auth
@@ -126,4 +111,3 @@ app.listen(config.PORT, async () => {
   console.log(`Server listening on port ${config.PORT} in ${config.NODE_ENV} mode`);
   await connectDatabase(); // Connect to the database
 });
-

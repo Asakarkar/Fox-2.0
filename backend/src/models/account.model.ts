@@ -40,7 +40,7 @@ const accountSchema = new Schema<AccountDocument>(
     timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        delete ret.refreshToken;
+        Reflect.deleteProperty(ret, 'refreshToken');
       },
     },
   }
